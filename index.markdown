@@ -4,3 +4,5 @@
 
 layout: home
 ---
+
+This is an out-of-the-box Jekyll site, which has been waxified by [jekyll-waxify](https://github.com/pbinkley/jekyll-waxify/) to add [Wax](https://minicomp.github.io/wax) IIIF support. A [single-image demonstratin collection](collections/) has been added.
