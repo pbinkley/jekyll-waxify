@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "yaml"
-require "byebug"
 require_relative "../waxify/version"
 
 # Add wax components to a Jekyll site
