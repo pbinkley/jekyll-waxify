@@ -3,6 +3,20 @@ A gem-packaged Jekyll plugin that installs basic minicomp/wax components
 
 This gem installs the simplest possible framework for [Wax](https://minicomp.github.io/wax) IIIF support in a Jekyll site. It is intended to be used in teaching, as well as to flatten the learning curve for those who are new to Wax.
 
+This is a work in progress.
+
+TODOs:
+
+- [ ] deploy to RubyGems
+- [x] provide scaffolding for Wax iiif images
+- [ ] enable import of images on collection creation
+- [ ] refactoring
+- [ ] provide scaffolding for Wax indexing
+- [ ] test with mature Jekyll sites
+- [ ] add specs
+
+A minimal demo site can be seen at [https://pbinkley.github.io/jekyll-waxify](https://pbinkley.github.io/jekyll-waxify). 
+
 ## Installation
 
 In order to make the site compatible with Github Pages, use the github pages gem to manage the Jekyll version. In your Jekyll site's Gemfile, comment out the Jekyll line:
