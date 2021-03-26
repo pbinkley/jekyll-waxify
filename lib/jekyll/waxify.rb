@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
-require_relative "waxify/version"
+require "jekyll/waxify/version"
 
 module Jekyll
   module Waxify
-    class Error < StandardError; end
     # Your code goes here...
   end
 end
+
+require "jekyll/commands/waxify.rb"
