@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "lib/jekyll/waxify/version"
+require_relative "lib/jekyll_waxify/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "jekyll-waxify"
@@ -30,6 +30,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "byebug", ">= 11"
+  spec.add_dependency "deep_merge", "~> 1.2"
+  spec.add_runtime_dependency 'progress_bar', '~> 1.3'
+  spec.add_runtime_dependency 'rainbow', '~> 3.0'
+  spec.add_runtime_dependency 'rake', '~> 13.0'
+  spec.add_runtime_dependency 'safe_yaml', '~> 1.0'
+  spec.add_runtime_dependency 'github-pages', '~> 213'
 
   # Uncomment to register a new dependency of your gem
   # spec.add_dependency "example-gem", "~> 1.0"
