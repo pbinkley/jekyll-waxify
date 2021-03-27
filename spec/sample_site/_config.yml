@@ -1,0 +1,48 @@
+title: 'sample site'
+url: ''
+baseurl: ''
+permalink: 'pretty'
+
+collections:
+  csv_collection:
+    layout: default.html
+    metadata:
+      source: valid.csv
+    images:
+      source: 'images/test_collection'
+  json_collection:
+    layout: default.html
+    metadata:
+      source: valid.json
+    images:
+      source: 'images/test_collection'
+      variants:
+        retina: 1400
+        tiny: 50
+  yaml_collection:
+    layout: default.html
+    metadata:
+      source: valid.yaml
+    images:
+      source: 'images/test_collection'
+      iiif:
+        label: gambrel
+        description: indescribable
+        attribution: blasphemous
+        logo: '/path/to/logo'
+
+  page_collection:
+    output: true
+
+search:
+  main:
+    index: 'js/lunr-index.json'
+    collections:
+      csv_collection:
+        fields: ['gambrel', 'blasphemous']
+      json_collection:
+        fields: ['gambrel', 'blasphemous']
+      yaml_collection:
+        fields: ['gambrel', 'blasphemous']
+      page_collection:
+        content: true
