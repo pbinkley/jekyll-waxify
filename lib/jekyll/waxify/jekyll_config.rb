@@ -2,7 +2,6 @@
 
 require "deep_merge"
 require "yaml"
-require "byebug"
 
 module Jekyll
   module Waxify

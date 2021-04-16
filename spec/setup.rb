@@ -4,8 +4,6 @@ require 'fileutils'
 ROOT    = `pwd`.strip.freeze
 SAMPLE  = "#{ROOT}/spec/sample_site".freeze
 BUILD   = "#{ROOT}/test_build".freeze
-WAXIFY_FRAMEWORK = File.join(File.dirname(File.expand_path(__FILE__)),
-                                 "../../wax-framework/.")
 
 # helper methods
 def quiet_stdout

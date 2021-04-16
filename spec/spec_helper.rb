@@ -10,7 +10,8 @@ require 'simplecov'
 SimpleCov.start do
   add_filter 'spec'
 end
-require "jekyll_waxify"
+require 'jekyll'
+require File.expand_path("../lib/jekyll/waxify.rb", __dir__)
 
 # provide shared context for tests
 shared_context 'shared', :shared_context => :metadata do
