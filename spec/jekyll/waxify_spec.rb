@@ -35,6 +35,13 @@ RSpec.describe Jekyll::Waxify::JekyllConfig do
         expect(result.new_config.dig("webrick", "header", "Access-Control-Allow-Origin")).to eq("*")
       end
     end
+    context "when initialized with valid config hash from file with CORS section" do
+      it "does not add a CORS section to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD, {}, "_config_with_cors.yml")
+        result.add_cors
+        expect(result.new_config.dig("webrick", "header", "Access-Control-Allow-Origin")).to be nil
+      end
+    end
   end
 
   describe "#deploy_framework" do
@@ -57,6 +64,13 @@ RSpec.describe Jekyll::Waxify::JekyllConfig do
                                      "source")).to eq("test-collection.csv")
       end
     end
+    context "when initialized with valid config hash from file" do
+      it "does not add a pre-existing collection to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD)
+        result.add_collection("csv_collection")
+        expect(result.new_config.dig("collections", "csv_collection")).to be nil
+      end
+    end
   end
 
   describe "#merge" do
@@ -64,7 +78,35 @@ RSpec.describe Jekyll::Waxify::JekyllConfig do
       it "merges new_config into yaml" do
         result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD, { "waxified" => true })
         result.merge
-        expect(result.new_config["waxified"]).to be true
+      end
+    end
+    context "when initialized with valid config hash from file with no collections" do
+      it "adds a collection to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD, {}, "_config_without_collections.yml")
+        result.add_collection("test-collection")
+        result.merge
+        expect(YAML.safe_load(result.text).dig("collections", "test-collection", "metadata",
+                                     "source")).to eq("test-collection.csv")
+      end
+    end
+    context "when initialized with valid config hash from file with collections at end" do
+      it "adds a collection to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD, {}, "_config_with_collections_at_end.yml")
+        result.add_collection("test-collection")
+        result.merge
+        expect(YAML.safe_load(result.text).dig("collections", "test-collection", "metadata",
+                                     "source")).to eq("test-collection.csv")
+        expect(result.text.scan(/^collections:/).count).to eq(1)
+      end
+    end
+    context "when initialized with valid config hash from file with comments" do
+      it "adds a collection to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD, {}, "_config_with_comment.yml")
+        result.add_collection("test-collection")
+        result.merge
+        expect(YAML.safe_load(result.text).dig("collections", "test-collection", "metadata",
+                                     "source")).to eq("test-collection.csv")
+        expect(result.text.scan(/^collections:/).count).to eq(1)
       end
     end
   end

@@ -9,16 +9,17 @@ module Jekyll
     class JekyllConfig
       attr_reader :yaml, :text, :new_config, :jekyll_dir
 
-      def initialize(framework_dir, jekyll_dir, new_config = {})
+      def initialize(framework_dir, jekyll_dir, new_config = {}, config_file = "_config.yml")
         @framework_dir = framework_dir
         @jekyll_dir = jekyll_dir
-        @text = File.read("#{@jekyll_dir}/_config.yml")
+        @config_file = config_file
+        @text = File.read("#{@jekyll_dir}/#{@config_file}")
         @yaml = YAML.safe_load(@text)
         @new_config = new_config
       end
 
       def waxified
-        @yaml["waxified-hide"]
+        @yaml["waxified"]
       end
 
       def deploy_framework
@@ -31,6 +32,8 @@ module Jekyll
       end
 
       def add_cors
+        return if @yaml.dig("webrick", "header", "Access-Control-Allow-Origin")
+
         # Add CORS stanza to _config.yml
         add(
           {
@@ -46,16 +49,13 @@ module Jekyll
       def add_collection(coll)
         return unless coll
 
-        # Add collection key (used in @text.sub below)
-        @text += "\ncollections:\n" unless @yaml["collections"]
-
         # Make coll images dir and metadata csv file
         FileUtils.mkdir_p "#{@jekyll_dir}/_data/raw_images/#{coll}"
         File.open("#{@jekyll_dir}/_data/#{coll}.csv", "w") { |file| file.write("pid,label\n") }
 
         @yaml["collections"] ||= {}
 
-        # TODO: error if coll already exists in @yaml
+        return if @yaml.dig("collections", coll)
 
         # Add coll to new config stanzas
         add(
@@ -75,11 +75,26 @@ module Jekyll
         @new_config["waxified"] = true
 
         new_yaml = @new_config.to_yaml.sub("---\n", "")
-        @text.sub! "\ncollections:\n", "\n#{new_yaml}"
+        
+        # collection block is terminated by EOF or a new key, i.e. a line 
+        # that begins a character other than whitespace or hash
+
+        groups = @text.match /(^collections:.*\n.+\n)(\Z|[^\s\#].*)/m
+
+        if groups.nil?
+          # there are no collections in initial yaml, so append new_yaml
+          @text += new_yaml
+        else
+          # merge collections from @new_config into collections
+          collections = YAML.safe_load(groups[1])
+          collections.deep_merge! @new_config
+
+          @text = groups.pre_match + collections.to_yaml.sub("---\n","") + groups[2]
+        end
       end
 
       def save
-        File.open("_config.yml", "w") { |f| f.puts @text }
+        File.open(@config_file, "w") { |f| f.puts @text }
       end
     end
   end
