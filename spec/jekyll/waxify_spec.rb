@@ -4,6 +4,8 @@ require "jekyll/commands/waxify"
 require "jekyll/waxify"
 require "setup"
 
+require "byebug"
+
 RSpec.describe Jekyll::Waxify do
   it "has a version number" do
     expect(Jekyll::Waxify::VERSION).not_to be nil
@@ -35,6 +37,13 @@ RSpec.describe Jekyll::Waxify::JekyllConfig do
         expect(result.new_config.dig("webrick", "header", "Access-Control-Allow-Origin")).to eq("*")
       end
     end
+    context "when initialized with valid config hash from file with CORS section" do
+      it "does not add a CORS section to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD, {}, "_config_with_cors.yml")
+        result.add_cors
+        expect(result.new_config.dig("webrick", "header", "Access-Control-Allow-Origin")).to be nil
+      end
+    end
   end
 
   describe "#deploy_framework" do
@@ -55,6 +64,13 @@ RSpec.describe Jekyll::Waxify::JekyllConfig do
         result.add_collection("test-collection")
         expect(result.new_config.dig("collections", "test-collection", "metadata",
                                      "source")).to eq("test-collection.csv")
+      end
+    end
+    context "when initialized with valid config hash from file" do
+      it "does not add a pre-existing collection to new_config" do
+        result = Jekyll::Waxify::JekyllConfig.new(Jekyll::Waxify::WAXIFY_FRAMEWORK, BUILD)
+        result.add_collection("csv_collection")
+        expect(result.new_config.dig("collections", "csv_collection")).to be nil
       end
     end
   end

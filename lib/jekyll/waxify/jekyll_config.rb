@@ -9,10 +9,11 @@ module Jekyll
     class JekyllConfig
       attr_reader :yaml, :text, :new_config, :jekyll_dir
 
-      def initialize(framework_dir, jekyll_dir, new_config = {})
+      def initialize(framework_dir, jekyll_dir, new_config = {}, config_file = "_config.yml")
         @framework_dir = framework_dir
         @jekyll_dir = jekyll_dir
-        @text = File.read("#{@jekyll_dir}/_config.yml")
+        @config_file = config_file
+        @text = File.read("#{@jekyll_dir}/#{@config_file}")
         @yaml = YAML.safe_load(@text)
         @new_config = new_config
       end
@@ -31,6 +32,8 @@ module Jekyll
       end
 
       def add_cors
+        return if @yaml.dig("webrick", "header", "Access-Control-Allow-Origin")
+
         # Add CORS stanza to _config.yml
         add(
           {
@@ -55,7 +58,7 @@ module Jekyll
 
         @yaml["collections"] ||= {}
 
-        # TODO: error if coll already exists in @yaml
+        return if @yaml.dig("collections", coll)
 
         # Add coll to new config stanzas
         add(
@@ -79,7 +82,7 @@ module Jekyll
       end
 
       def save
-        File.open("_config.yml", "w") { |f| f.puts @text }
+        File.open(@config_file, "w") { |f| f.puts @text }
       end
     end
   end
