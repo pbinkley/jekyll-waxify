@@ -80,11 +80,15 @@ You might also want to tinker with these:
 - [item\_metadata.html](https://github.com/pbinkley/jekyll-waxify/blob/main/wax-framework/_includes/item_metadata.html): Controls the display of metadata in a table under the OpenSeadragon image.
 - [item\_pagination.html](https://github.com/pbinkley/jekyll-waxify/blob/main/wax-framework/_includes/item_metadata.html): Controls the pagination links to previous and next images in multi-image items.
 
-## Development
+## Publish new version
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+- commit changes
+- update and commit ```lib/jekyll/waxify/version.rb```
+- ```git tag v0.x.x```
+- ```git push```
+- [create release](https://github.com/pbinkley/jekyll-waxify/releases)
+- ```gem build jekyll-waxify.gemspec```
+- ```gem push jekyll-waxify-0.x.x.gem```
 
 ## Contributing
 
