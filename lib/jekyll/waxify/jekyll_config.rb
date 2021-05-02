@@ -38,7 +38,7 @@ module Jekyll
         add(
           {
             "webrick" => {
-              "header" => {
+              "headers" => {
                 "Access-Control-Allow-Origin" => "*"
               }
             }
