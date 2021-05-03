@@ -29,7 +29,7 @@ In order to make the site compatible with Github Pages, use the github pages gem
 And add these lines to the ```jekyll_plugins``` group:
 
 ```ruby
-gem 'github-pages', '~> 214'
+gem 'github-pages', '>= 213'
 gem 'jekyll-waxify', '~> 0.1'
 ```
 
